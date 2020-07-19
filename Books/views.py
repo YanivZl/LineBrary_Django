@@ -17,11 +17,11 @@ def homepage(request):
     if request.user.is_authenticated:
         user = Profile.objects.filter(user= request.user)
         user_name_and_last = user[0].first_name + ' ' +  user[0].last_name
-        Books_For_Recomended = Book.objects.all().order_by('?')[:20]
+        booksInStation = list(BookStationRelation.objects.filter(station=user[0].default_station).values_list('book', flat=True))
+        Books_For_Recomended = Book.objects.filter(ISBN13__in=booksInStation).order_by('?')[:20]
         categories_array = [tup[0] for tup in categories]
         shuffle(categories_array)
         categories_books_relation_array = {}
-        booksInStation = list(BookStationRelation.objects.filter(station=user[0].default_station).values_list('book', flat=True))
         for category in categories_array:
             booksInCategory = Book.objects.filter(ISBN13__in=booksInStation).filter(gener=category)
             
