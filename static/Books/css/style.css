@@ -311,6 +311,7 @@ main
     font-size: 20px;
     color: white;
     font-family: Roboto;
+    overflow: hidden;
 }
 
 #user_options
@@ -1379,6 +1380,10 @@ form > a >  button
     div.addBookContainer
     {
         margin: 100px auto;
+    }
+
+    #sec6_menu > form > button > span{
+        font-size: 26px;
     }
 }
 
