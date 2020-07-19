@@ -28,7 +28,10 @@ urlpatterns = [
     path("addbook/" , views.add_book , name="add_book"),
     path("user/", views.user, name="user"),
     path("linkBooks", views.linkBooks, name="link_books"),
-    #path("booksInStation", views.bookLocation, name="book_location"),
+    # path("booksInStation", views.bookLocation, name="book_location"),
     path("selecrRoute" , views.SelectRoute , name="selectRoute"),
-    path("books", views.books_search, name="booksearch")
+    path("books", views.books_search, name="booksearch"),
+    path("loans", views.loans, name="loan_book"),
+    path("bookByStation", views.bookByStation, name="bookByStation")
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+

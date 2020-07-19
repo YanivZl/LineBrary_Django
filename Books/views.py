@@ -21,9 +21,14 @@ def homepage(request):
         categories_array = [tup[0] for tup in categories]
         shuffle(categories_array)
         categories_books_relation_array = {}
-        for category in categories_array: 
-            if len(Book.objects.filter(gener=category)) > 0:
-                categories_books_relation_array[category] = Book.objects.filter(gener=category)
+        booksInStation = list(BookStationRelation.objects.filter(station=user[0].default_station).values_list('book', flat=True))
+        print(booksInStation)
+        for category in categories_array:
+            booksInCategory = Book.objects.filter(ISBN13__in=booksInStation).filter(gener=category)
+            
+            if len(booksInCategory) > 0:
+                categories_books_relation_array[category] = booksInCategory
+        print(categories_books_relation_array)
         return render(request , "Books/index.html", { 'User_Name' : user_name_and_last , 'Books_For_Recomended' : Books_For_Recomended , 'categories' : categories_array , 'books' : categories_books_relation_array })
     else: 
         return redirect("login_page")
@@ -85,10 +90,14 @@ def user(request):
         wishlist= Wishlist.objects.filter(user__username=request.user)
         return render(request,'Books/user.html',{'User_Name':request.user, "orders" : orders, 'contributions':contributions,}  )
 
-# def loans(request):
-#     if request.method=='GET':
-#         bookstation=BookStationRelation.object.filter(Book.ISBN13=Book.ISBN13).delete()
-#             return render(request, )
+def loans(request):
+    if request.method=='POST':
+        user = request.user
+        station=request.POST['station']
+        book=request.POST['book'] 
+        id=Order.objects.create(user=user,ISBN13=book, station=station )
+        BookStationRelation.objects.filter(book=book, station=station).delete()
+        return JsonResponse({})       
 
 def linkBooks(request):
     if request.method == 'GET':
@@ -108,5 +117,14 @@ def books_search(request):
     if request.method == 'GET':
         name = request.GET.get('name')
         books = Book.objects.filter(bookname__contains=name)
-        bla = json.loads(serializers.serialize('json', books))
-        return JsonResponse(bla, safe=False)
+        res = json.loads(serializers.serialize('json', books))
+        return JsonResponse(res, safe=False)
+
+def  bookByStation(request):
+    if request.method =='GET':
+        name=request.GET.get('name')
+        print(name)
+        station=BookStationRelation.objects.filter(book__bookname=name)
+        print(station)
+        res= json.loads(serializers.serialize('json', station))
+        return JsonResponse(res, safe=False)
