@@ -1,3 +1,4 @@
+from django.core import serializers
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from .models import User , Book , BookStationRelation , Order , categories, Contributions, Wishlist, stations , Profile
@@ -8,6 +9,7 @@ from django.http import HttpResponseRedirect
 from django.db import IntegrityError
 from random import shuffle
 import os
+import json
 # Create your views here.
 
 
@@ -20,13 +22,11 @@ def homepage(request):
         shuffle(categories_array)
         categories_books_relation_array = {}
         booksInStation = list(BookStationRelation.objects.filter(station=user[0].default_station).values_list('book', flat=True))
-        print(booksInStation)
         for category in categories_array:
             booksInCategory = Book.objects.filter(ISBN13__in=booksInStation).filter(gener=category)
             
             if len(booksInCategory) > 0:
                 categories_books_relation_array[category] = booksInCategory
-        print(categories_books_relation_array)
         return render(request , "Books/index.html", { 'User_Name' : user_name_and_last , 'Books_For_Recomended' : Books_For_Recomended , 'categories' : categories_array , 'books' : categories_books_relation_array })
     else: 
         return redirect("login_page")
@@ -130,8 +130,6 @@ def books_search(request):
 def  bookByStation(request):
     if request.method =='GET':
         name=request.GET.get('name')
-        print(name)
         station=BookStationRelation.objects.filter(book__bookname=name)
-        print(station)
         res= json.loads(serializers.serialize('json', station))
         return JsonResponse(res, safe=False)
