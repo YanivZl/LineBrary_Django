@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   inkscape:version="1.0 (4035a4fb49, 2020-05-01)"
+   sodipodi:docname="logo.svg"
+   id="svg32"
+   version="1.1"
+   viewBox="0 0 24 24"
+   height="24"
+   width="24">
+  <metadata
+     id="metadata38">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs36" />
+  <sodipodi:namedview
+     inkscape:current-layer="svg32"
+     inkscape:window-maximized="1"
+     inkscape:window-y="-9"
+     inkscape:window-x="-9"
+     inkscape:cy="8.4048193"
+     inkscape:cx="12.015669"
+     inkscape:zoom="21.273152"
+     showgrid="false"
+     id="namedview34"
+     inkscape:window-height="1001"
+     inkscape:window-width="1920"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0"
+     guidetolerance="10"
+     gridtolerance="10"
+     objecttolerance="10"
+     borderopacity="1"
+     bordercolor="#666666"
+     pagecolor="#ffffff" />
+  <path
+     style="fill:#ffffff"
+     id="path30"
+     d="M12 0c-5.522 0-10 4.395-10 9.815 0 5.505 4.375 9.268 10 14.185 5.625-4.917 10-8.68 10-14.185 0-5.42-4.478-9.815-10-9.815zm0 18c-4.419 0-8-3.582-8-8s3.581-8 8-8 8 3.582 8 8-3.581 8-8 8z" />
+  <g
+     transform="matrix(0.46516862,0,0,0.49493942,6.1476812,3.9574186)"
+     id="g82"
+     style="clip-rule:evenodd;fill-rule:evenodd">
+    <path
+       style="fill:#ffffff"
+       sodipodi:nodetypes="csssscccsscccccccccccc"
+       d="M 22,24 H 5 C 3.343,24 2,22.657 2,21 V 3 C 2,1.343 3.343,0 5,0 H 22 Z M 20,20 H 5.495 c -1.375,0 -1.375,2 0,2 H 20 Z M 20,2 H 5 V 18 H 20 Z M 17,5 H 8 V 8 5 Z"
+       id="path71" />
+  </g>
+</svg>
