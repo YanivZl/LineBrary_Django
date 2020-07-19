@@ -193,15 +193,11 @@ function searchWhileTyping()
             // used_books += book_name;
         }
 
-        $(".options_list_on_seacrh").click(function() {
-            var source = $(this).find('img').attr('src');
-            var name = $(this).find('img').attr('name');
-            appendBookScreen(name , source);
-            loadBookPage(name , source);
-        });
+
     
     })
 
+    
 
     // console.log(names)
     // for(var i = 0; i< divs.length; i++)
@@ -219,6 +215,17 @@ function searchWhileTyping()
 
 }
 
+$(document).ready(function() {
+    $(".options_list_on_seacrh").click(function() {
+        var source = $(this).find('img').attr('src');
+        var name = $(this).find('img').attr('name');
+        var information = $(this).find('img').attr('title');
+        console.log(source , name , information);
+        appendBookScreen(name , source , information);
+        loadBookPage(name , source , information);
+    });
+});
+
 function onChange(event) {
     var file = event.target.files[0];
     var reader = new FileReader();
@@ -226,5 +233,4 @@ function onChange(event) {
         $('#img').attr('src', e.target.result);
     };
   
-    reader.readAsDataURL(file);
-  }
+    reader.readAsDataURL(file);};
