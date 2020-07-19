@@ -118,7 +118,10 @@ $(document).ready(function() {
 
 // Open search by clickimg on button nav search icon 
 
-var searchScreen = '<div class="search_screen"><input class="bg-secondary" val="" type="text" id="search_input" placeholder="Name/Author/Category/ISBN"></div>';
+var searchScreen = `
+    <div class="search_screen">
+        <input class="bg-secondary" val="" type="text" id="search_input" placeholder="Book name">
+    </div>`;
 $(document).ready(function() {
     $("body").append(searchScreen);
     $(".search_screen").hide();
@@ -138,32 +141,32 @@ $("#button-nav-search").click(function() {
     $(".search_screen").slideDown();
     $("#search_input").slideDown();
     $(".search_screen").append("<div class='to_fit_input_search'></div>");
-    var used_books = [];
-    for(var i = 0; i < 20; i++)
-    {
-        var rand_pos_of_imgs = Math.floor(Math.random() * name_pic_relation.length);
-        var book_name = name_pic_relation[rand_pos_of_imgs].name;
-        if(!used_books.includes(book_name))
-        {
-            $(".search_screen").append('<div class="options_list_on_seacrh"></div>');
-            $($(".options_list_on_seacrh")[i]).append("<img name='" + book_name + "' src='" + name_pic_relation[rand_pos_of_imgs].src + "'></img>");
-            $($(".options_list_on_seacrh")[i]).append("<div class='search_list_text'><div class='font-weight-bold text-white text-left'>" + book_name + "</div><div class='font-weight-light text-white'>Author Name</div><div class='font-weight-light text-white'>Year of publication</div></div>");
-            used_books += book_name;
-        }
-        else
-        {
-            i--;
-        }
-    }
-    $(".search_screen").append("<div class='to_fit_button_nav'></div>");
-    //$(".options_list_on_seacrh").append("<img name='World History' src=includes/images/bookpic.jpg></img>");
+    // var used_books = [];
+    // for(var i = 0; i < 20; i++)
+    // {
+    //     var rand_pos_of_imgs = Math.floor(Math.random() * name_pic_relation.length);
+    //     var book_name = name_pic_relation[rand_pos_of_imgs].name;
+    //     if(!used_books.includes(book_name))
+    //     {
+    //         $(".search_screen").append('<div class="options_list_on_seacrh"></div>');
+    //         $($(".options_list_on_seacrh")[i]).append("<img name='" + book_name + "' src='" + name_pic_relation[rand_pos_of_imgs].src + "'></img>");
+    //         $($(".options_list_on_seacrh")[i]).append("<div class='search_list_text'><div class='font-weight-bold text-white text-left'>" + book_name + "</div><div class='font-weight-light text-white'>Author Name</div><div class='font-weight-light text-white'>Year of publication</div></div>");
+    //         used_books += book_name;
+    //     }
+    //     else
+    //     {
+    //         i--;
+    //     }
+    // }
+    // $(".search_screen").append("<div class='to_fit_button_nav'></div>");
+    // //$(".options_list_on_seacrh").append("<img name='World History' src=includes/images/bookpic.jpg></img>");
 
-    $(".options_list_on_seacrh").click(function() {
-        var source = $(this).find('img').attr('src');
-        var name = $(this).find('img').attr('name');
-        appendBookScreen(name , source);
-        loadBookPage(name , source);
-    });
+    // $(".options_list_on_seacrh").click(function() {
+    //     var source = $(this).find('img').attr('src');
+    //     var name = $(this).find('img').attr('name');
+    //     appendBookScreen(name , source);
+    //     loadBookPage(name , source);
+    // });
     
 });
 
@@ -177,22 +180,42 @@ $(document).ready(function() {
 function searchWhileTyping()
 {
     var value = $("#search_input").val();
-    console.log(value);
     var filter = $("#search_input").val().toUpperCase();
-    var divs = $(".options_list_on_seacrh");
-    var names = [];
-    for(var i = 0; i< divs.length; i++)
-    {
-        console.log($(divs[i]).find('img').attr('name').toUpperCase().indexOf(filter));
-       if($(divs[i]).find('img').attr('name').toUpperCase().indexOf(filter) < 0)
+    $(".options_list_on_seacrh").remove();
+    
+    $.getJSON(`/books?name=${filter}`, function(data) {
+        for (var i = 0; i < Math.min(20, data.length); i++)
         {
-            $(divs[i]).hide();
+
+            $(".search_screen").append('<div class="options_list_on_seacrh"></div>');
+            $($(".options_list_on_seacrh")[i]).append("<img name='" + data[i].fields.bookname + "' src='" + data[i].fields.imageURL + "'></img>");
+            $($(".options_list_on_seacrh")[i]).append("<div class='search_list_text'><div class='font-weight-bold text-white text-left'>" + data[i].fields.bookname + "</div><div class='font-weight-light text-white'>Author Name</div><div class='font-weight-light text-white'>Year of publication</div></div>");
+            // used_books += book_name;
         }
-        else
-        {
-            $(divs[i]).show();
-        }
-    }
+
+        $(".options_list_on_seacrh").click(function() {
+            var source = $(this).find('img').attr('src');
+            var name = $(this).find('img').attr('name');
+            appendBookScreen(name , source);
+            loadBookPage(name , source);
+        });
+    
+    })
+
+
+    // console.log(names)
+    // for(var i = 0; i< divs.length; i++)
+    // {
+    //     console.log($(divs[i]).find('img').attr('name').toUpperCase().indexOf(filter));
+    //    if($(divs[i]).find('img').attr('name').toUpperCase().indexOf(filter) < 0)
+    //     {
+    //         $(divs[i]).hide();
+    //     }
+    //     else
+    //     {
+    //         $(divs[i]).show();
+    //     }
+    // }
 
 }
 

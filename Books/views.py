@@ -1,4 +1,5 @@
 from django.http import JsonResponse
+from django.core import serializers
 from django.shortcuts import render, redirect
 from .models import User , Book , BookStationRelation , Order , categories, Contributions, Wishlist, stations , Profile
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
@@ -8,6 +9,7 @@ from django.http import HttpResponseRedirect
 from django.db import IntegrityError
 from random import shuffle
 import os
+import json
 # Create your views here.
 
 
@@ -101,3 +103,10 @@ def SelectRoute(request):
     if request.method == 'GET':
         return render(request, 'Books/selectRoute.html', { 'route_form' : RouteForm()})
     #else:
+
+def books_search(request):
+    if request.method == 'GET':
+        name = request.GET.get('name')
+        books = Book.objects.filter(bookname__contains=name)
+        bla = json.loads(serializers.serialize('json', books))
+        return JsonResponse(bla, safe=False)
