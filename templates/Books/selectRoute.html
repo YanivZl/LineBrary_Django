@@ -108,14 +108,15 @@
                 {{ route_form|crispy }}
                 <button class="btn btn-primary mx-auto d-block mt-5" type="submit">Find books in route!</button>
             </form>
-            <div class="line mt-5"></div>
-            <h3 class="mt-2 mb-2 w-50 container text-center">Results</h3>
+            {% if request.method == 'POST' %}
+                <div class="line mt-5"></div><h3 class="mt-2 mb-2 w-50 container text-center">Results</h3>
+            {% endif %}
             {% for station in stations %}
             <div class="options_list_on_seacrh">
                 <img name='{{ book.bookname }}' src='{{ book.imageURL }}'></img>
                 <div class='search_list_text'><div class='font-weight-bold text-white text-left'>{{ book.bookname }}</div>
                 <div class='font-weight-light text-white'>{{ book.author }}</div>
-                <div class='font-weight-light text-white'>{{ station }}</div>
+                <div class='font-weight-light text-white'>{{ station.station }}</div>
             </div>
             </div>
 
