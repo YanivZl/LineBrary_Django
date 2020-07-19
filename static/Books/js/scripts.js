@@ -41,7 +41,6 @@ $(document).ready( function() {
 });
 
 
-// ---- Book page insert and exe functions --------------
 
 function addBook()
 {
@@ -79,7 +78,12 @@ function flip_panel_relation(name) {
         }
     });
     $("#loan_now_flip[name='" + name + "']").click( function() { $("#loan_now_panel[name='" + name + "']").slideToggle("slow"); });
-    $("#add_to_wishlist[name='" + name + "']").click(function(){ $(this).toggleClass("redColor");});
+    $("#add_to_wishlist[name='" + name + "']").click(function(){
+        book = this
+        $.post("/wishlist/", {name: name}, function(){
+            $(book).toggleClass("redColor");
+        })
+    });
     $("#confirm_loan_now").click(function() {
         var d = new Date();
         $("#loan_now_panel[name='" + name + "']").empty();
@@ -102,13 +106,9 @@ function appendBookScreen(name , source, information)
         $("body").append(book_screen);
         book_page_opened += name;
         var d = {};
-        //console.log(name , source);
     }
 }
 
-//$(document).ready(function() {
-//    $("body").append(book_screen);
-//  });
 
 var book_page_opened = [];
 
@@ -125,10 +125,6 @@ $(document).ready(function() {
 
 });
 
-// ---------------------------------------------------------------
-
-
-// Open search by clickimg on button nav search icon 
 
 var searchScreen = `
     <div class="search_screen">
@@ -149,42 +145,14 @@ $("#button-nav-search").click(function() {
     $(".a_footer > span > i").removeClass("wheatColor");
     $("#button-nav-search > span").addClass("wheatColor");
     $("#button-nav-search > span > i").addClass("wheatColor");
-    //$(".search_screen").show();
     $(".search_screen").slideDown();
     $("#search_input").slideDown();
     $(".search_screen").append("<div class='to_fit_input_search'></div>");
-    // var used_books = [];
-    // for(var i = 0; i < 20; i++)
-    // {
-    //     var rand_pos_of_imgs = Math.floor(Math.random() * name_pic_relation.length);
-    //     var book_name = name_pic_relation[rand_pos_of_imgs].name;
-    //     if(!used_books.includes(book_name))
-    //     {
-    //         $(".search_screen").append('<div class="options_list_on_seacrh"></div>');
-    //         $($(".options_list_on_seacrh")[i]).append("<img name='" + book_name + "' src='" + name_pic_relation[rand_pos_of_imgs].src + "'></img>");
-    //         $($(".options_list_on_seacrh")[i]).append("<div class='search_list_text'><div class='font-weight-bold text-white text-left'>" + book_name + "</div><div class='font-weight-light text-white'>Author Name</div><div class='font-weight-light text-white'>Year of publication</div></div>");
-    //         used_books += book_name;
-    //     }
-    //     else
-    //     {
-    //         i--;
-    //     }
-    // }
-    // $(".search_screen").append("<div class='to_fit_button_nav'></div>");
-    // //$(".options_list_on_seacrh").append("<img name='World History' src=includes/images/bookpic.jpg></img>");
-
-    // $(".options_list_on_seacrh").click(function() {
-    //     var source = $(this).find('img').attr('src');
-    //     var name = $(this).find('img').attr('name');
-    //     appendBookScreen(name , source);
-    //     loadBookPage(name , source);
-    // });
     
 });
 
 
 
-// While typing search
 $(document).ready(function() {
     $("#search_input").keyup( function(){ searchWhileTyping();});
 });
@@ -202,7 +170,6 @@ function searchWhileTyping()
             $(".search_screen").append('<div class="options_list_on_seacrh"></div>');
             $($(".options_list_on_seacrh")[i]).append("<img name='" + data[i].fields.bookname + "' src='" + data[i].fields.imageURL + "'></img>");
             $($(".options_list_on_seacrh")[i]).append("<div class='search_list_text'><div class='font-weight-bold text-white text-left'>" + data[i].fields.bookname + "</div><div class='font-weight-light text-white'>Author Name</div><div class='font-weight-light text-white'>Year of publication</div></div>");
-            // used_books += book_name;
         }
 
         $(".options_list_on_seacrh").click(function() {
@@ -218,26 +185,12 @@ function searchWhileTyping()
 
     
 
-    // console.log(names)
-    // for(var i = 0; i< divs.length; i++)
-    // {
-    //     console.log($(divs[i]).find('img').attr('name').toUpperCase().indexOf(filter));
-    //    if($(divs[i]).find('img').attr('name').toUpperCase().indexOf(filter) < 0)
-    //     {
-    //         $(divs[i]).hide();
-    //     }
-    //     else
-    //     {
-    //         $(divs[i]).show();
-    //     }
-    // }
-
 }
 
 function onChange(event) {
     var file = event.target.files[0];
     var reader = new FileReader();
-    reader.onload = function(e) {   //event for the end of load
+    reader.onload = function(e) {  
         $('#img').attr('src', e.target.result);
     };
   

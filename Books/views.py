@@ -7,7 +7,7 @@ from django.contrib.auth import authenticate, login, logout
 from .forms import BookForm, BookStationRelationForm , ProfileForm , RouteForm
 from django.http import HttpResponseRedirect
 from django.db import IntegrityError
-from random import shuffle
+import random
 import os
 import json
 
@@ -21,7 +21,6 @@ def homepage(request):
         booksInStation = list(BookStationRelation.objects.filter(station=user[0].default_station).values_list('book', flat=True))
         Books_For_Recomended = Book.objects.filter(ISBN13__in=booksInStation).order_by('?')[:20]
         categories_array = [tup[0] for tup in categories]
-        shuffle(categories_array)
         categories_books_relation_array = {}
         for category in categories_array: 
             booksInCategory = Book.objects.filter(ISBN13__in=booksInStation).filter(gener=category)
@@ -95,6 +94,7 @@ def loans(request):
         station = user.default_station
         book = Book.objects.filter(bookname=request.POST['name'])[0]
         Order.objects.create(user=user,ISBN13=book, station=station)
+        BookStationRelation.objects.filter(book=book, station=station).delete()
         return JsonResponse({})
 
 def addWishlist(request):
@@ -103,6 +103,7 @@ def addWishlist(request):
         book = Book.objects.filter(bookname=request.POST['name'])[0]
         if not Wishlist.objects.filter(ISBN13=book, user=user.user).exists():
             Wishlist.objects.create(user=user.user, ISBN13=book)
+        print("Returning")
         return JsonResponse({})
 
 def linkBooks(request):
