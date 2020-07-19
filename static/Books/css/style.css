@@ -1400,3 +1400,9 @@ form > a >  button
     display: block;
 }
 
+.line{
+    height: 2px;
+    width: 90%;
+    margin: 0 auto;
+    background-color: white;
+}
