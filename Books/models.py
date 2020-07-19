@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from datetime import date
+from datetime import date, timezone
 # Create your models here.
 
 
@@ -113,6 +113,7 @@ class Order(models.Model):
     user = models.ForeignKey(Profile , on_delete=models.CASCADE)
     ISBN13 = models.ForeignKey(Book , on_delete=models.CASCADE)
     station = models.CharField(max_length=100 , choices=stations , default='Tel Aviv - Savidor Center')
+    # order_date = models.DateTimeField(auto_now_add=True)
 
 class Contributions(models.Model):
     user = models.ForeignKey(Profile, on_delete=models.DO_NOTHING)

@@ -83,10 +83,12 @@ def user(request):
         wishlist= Wishlist.objects.filter(user__username=request.user)
         return render(request,'Books/user.html',{'User_Name':request.user, "orders" : orders, 'contributions':contributions,}  )
 
-# def loans(request):
-#     if request.method=='GET':
-#         bookstation=BookStationRelation.object.filter(Book.ISBN13=Book.ISBN13).delete()
-#             return render(request, )
+def loans(request):
+    if request.method=='GET':
+        user = Profile.objects.filter(user=request.user)[0]
+        station = user.default_station
+        book = Book.objects.filter(bookname=request.POST['name'])
+        
 
 def linkBooks(request):
     if request.method == 'GET':

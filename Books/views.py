@@ -1,3 +1,4 @@
+from django.core import serializers
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from .models import User , Book , BookStationRelation , Order , categories, Contributions, Wishlist, stations , Profile
@@ -8,6 +9,8 @@ from django.http import HttpResponseRedirect
 from django.db import IntegrityError
 from random import shuffle
 import os
+import json
+
 # Create your views here.
 
 
@@ -15,13 +18,15 @@ def homepage(request):
     if request.user.is_authenticated:
         user = Profile.objects.filter(user= request.user)
         user_name_and_last = user[0].first_name + ' ' +  user[0].last_name
-        Books_For_Recomended = Book.objects.all().order_by('?')[:20]
+        booksInStation = list(BookStationRelation.objects.filter(station=user[0].default_station).values_list('book', flat=True))
+        Books_For_Recomended = Book.objects.filter(ISBN13__in=booksInStation).order_by('?')[:20]
         categories_array = [tup[0] for tup in categories]
         shuffle(categories_array)
         categories_books_relation_array = {}
         for category in categories_array: 
-            if len(Book.objects.filter(gener=category)) > 0:
-                categories_books_relation_array[category] = Book.objects.filter(gener=category)
+            booksInCategory = Book.objects.filter(ISBN13__in=booksInStation).filter(gener=category)
+            if len(booksInCategory) > 0:
+                categories_books_relation_array[category] = booksInCategory
         return render(request , "Books/index.html", { 'User_Name' : user_name_and_last , 'Books_For_Recomended' : Books_For_Recomended , 'categories' : categories_array , 'books' : categories_books_relation_array })
     else: 
         return redirect("login_page")
@@ -78,15 +83,27 @@ def add_book(request):
 
 def user(request):
     if request.method == 'GET':
-        orders = Order.objects.filter(user__username=request.user)
-        contributions= Contributions.objects.filter(user__username=request.user)
-        wishlist= Wishlist.objects.filter(user__username=request.user)
-        return render(request,'Books/user.html',{'User_Name':request.user, "orders" : orders, 'contributions':contributions,}  )
+        user = Profile.objects.filter(user=request.user)[0]
+        orders = Order.objects.filter(user=user)
+        contributions= Contributions.objects.filter(user=user)
+        wishlist= Wishlist.objects.filter(user=user.user)
+        return render(request,'Books/user.html',{'User_Name':request.user, "orders" : orders, 'contributions':contributions, 'wishlist': wishlist}  )
 
-# def loans(request):
-#     if request.method=='GET':
-#         bookstation=BookStationRelation.object.filter(Book.ISBN13=Book.ISBN13).delete()
-#             return render(request, )
+def loans(request):
+    if request.method=='POST':
+        user = Profile.objects.filter(user=request.user)[0]
+        station = user.default_station
+        book = Book.objects.filter(bookname=request.POST['name'])[0]
+        Order.objects.create(user=user,ISBN13=book, station=station)
+        return JsonResponse({})
+
+def addWishlist(request):
+    if request.method=='POST':
+        user = Profile.objects.filter(user=request.user)[0]
+        book = Book.objects.filter(bookname=request.POST['name'])[0]
+        if not Wishlist.objects.filter(ISBN13=book, user=user.user).exists():
+            Wishlist.objects.create(user=user.user, ISBN13=book)
+        return JsonResponse({})
 
 def linkBooks(request):
     if request.method == 'GET':

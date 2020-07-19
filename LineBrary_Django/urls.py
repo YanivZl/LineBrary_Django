@@ -30,6 +30,7 @@ urlpatterns = [
     path("linkBooks", views.linkBooks, name="link_books"),
     #path("booksInStation", views.bookLocation, name="book_location"),
     path("books", views.books_search, name="booksearch"),
-    path("selectRoute" , views.SelectRoute , name="selectRoute")
+    path("selectRoute" , views.SelectRoute , name="selectRoute"),
+    path("loans/", views.loans, name="Loans"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
