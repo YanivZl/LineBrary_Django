@@ -101,15 +101,27 @@ def SelectRoute(request):
     if request.method == 'GET':
         return render(request, 'Books/selectRoute.html', { 'route_form' : RouteForm()})
     else:
-        stations_by_route = ['Tel Aviv HaHagana' , 'Tel Aviv Ha Shalom' , 'Savidor-Center Tel Aviv' , 'Tel Aviv University' , 'Herzliya' ,'Haifa - Hof Hakarmel' , 'Haifa - Bat Galim' , 'Haifa - Merkaz Hashmuna' , 'Haifa - Merkazit HaMifrats' , 'Haifa - Hutsot HaMifrats']
+        stations_by_route = ['Tel Aviv HaHagana' , 'Tel Aviv Ha Shalom' , 'Savidor-Center Tel Aviv' , 'Tel Aviv University' , 'Herzliya' , 'Netanya' ,'Haifa - Hof Hakarmel' , 'Haifa - Bat Galim' , 'Haifa - Merkaz Hashmuna' , 'Haifa - Merkazit HaMifrats' , 'Haifa - Hutsot HaMifrats']
         start = request.POST['starting_station']
         end = request.POST['dest_station']
-        start_to_end = [ station for station in stations_by_route]
+        book = Book.objects.all().filter(bookname=request.POST['select_book'])
+        start_to_end = []
+        if stations_by_route.index(start) > stations_by_route.index(end):
+            stations_by_route.reverse()
+        for station in stations_by_route:
+            if stations_by_route.index(start) > stations_by_route.index(station) or stations_by_route.index(end) < stations_by_route.index(station):
+                continue
+            start_to_end.append(station)
         availible_stations = []
-        if  stations_by_route.index(start_to_end[0]) < stations_by_route.index(start_to_end[len(stations_by_route) - 1]):
-            for station in stations_by_route:
-                availible_stations.append(BookStationRelation.objects.all().filter(station=station).filter(book=Books.objects.all().filter(bookname=request.POST['select_book'])))
-        return render(request , 'Books/selectRoute.html', {'route_form' : RouteForm() , 'book' : request.POST['select_book'] , 'stations' : availible_stations})
+        for station in start_to_end:
+            bsr = BookStationRelation.objects.filter(book=book[0]).filter(station= station)
+            if len(bsr) > 0:
+                availible_stations.append(bsr[0])
+        if len(availible_stations) > 0:
+            return render(request , 'Books/selectRoute.html', {'route_form' : RouteForm() , 'book' : book[0] , 'stations' : availible_stations})
+        else: 
+            return render(request , 'Books/selectRoute.html', {'route_form' : RouteForm()  , 'errMsg' : "The book isn't exsists at any station in this route."})
+        
 
 def books_search(request):
     if request.method == 'GET':
