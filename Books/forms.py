@@ -91,5 +91,8 @@ class ProfileForm(forms.ModelForm):
 
 class RouteForm(forms.Form):
     choices = ('Savidor-Center Tel Aviv' , 'Tel Aviv University' , 'Tel Aviv Ha Shalom' , 'Tel Aviv HaHagana' , 'Haifa - Hutsot HaMifrats','Haifa - Merkazit HaMifrats','Haifa - Merkaz Hashmuna','Haifa - Bat Galim','Haifa - Hof Hakarmel')
-    starting_station = forms.ChoiceField(choices=choices ,  label='Starting Station')
-    dest_station = forms.ChoiceField(choices=choices , label='Destination Station')
+    choices_tuples = [(x,x) for x in choices]
+    books = sorted([ (book.bookname , book.bookname) for book in Book.objects.all()])
+    select_book = forms.ChoiceField(choices=books , label= 'Book')
+    starting_station = forms.ChoiceField(choices=choices_tuples ,  label='Starting Station')
+    dest_station = forms.ChoiceField(choices=choices_tuples , label='Destination Station')

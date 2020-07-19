@@ -1,5 +1,4 @@
 from django.http import JsonResponse
-from django.core import serializers
 from django.shortcuts import render, redirect
 from .models import User , Book , BookStationRelation , Order , categories, Contributions, Wishlist, stations , Profile
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
@@ -9,7 +8,6 @@ from django.http import HttpResponseRedirect
 from django.db import IntegrityError
 from random import shuffle
 import os
-import json
 # Create your views here.
 
 
@@ -111,7 +109,16 @@ def linkBooks(request):
 def SelectRoute(request):
     if request.method == 'GET':
         return render(request, 'Books/selectRoute.html', { 'route_form' : RouteForm()})
-    #else:
+    else:
+        stations_by_route = ['Tel Aviv HaHagana' , 'Tel Aviv Ha Shalom' , 'Savidor-Center Tel Aviv' , 'Tel Aviv University' , 'Herzliya' ,'Haifa - Hof Hakarmel' , 'Haifa - Bat Galim' , 'Haifa - Merkaz Hashmuna' , 'Haifa - Merkazit HaMifrats' , 'Haifa - Hutsot HaMifrats']
+        start = request.POST['starting_station']
+        end = request.POST['dest_station']
+        start_to_end = [ station for station in stations_by_route]
+        availible_stations = []
+        if  stations_by_route.index(start_to_end[0]) < stations_by_route.index(start_to_end[len(stations_by_route) - 1]):
+            for station in stations_by_route:
+                availible_stations.append(BookStationRelation.objects.all().filter(station=station).filter(book=Books.objects.all().filter(bookname=request.POST['select_book'])))
+        return render(request , 'Books/selectRoute.html', {'route_form' : RouteForm() , 'book' : request.POST['select_book'] , 'stations' : availible_stations})
 
 def books_search(request):
     if request.method == 'GET':
