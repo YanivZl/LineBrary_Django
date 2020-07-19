@@ -101,7 +101,7 @@
             </section>
         </section>
         <section id="to_fit_top_header"></section>
-        <div class="col-sm-6 addBookContainer">
+        <div class="col-sm-6 addBookContainer mb-5">
             <h3 class="mt-5">Select book, starting and destination stations:</h3>
             <form class="mt-4" action="#" method="post">
                 {% csrf_token %}
@@ -109,11 +109,11 @@
                 <button class="btn btn-primary mx-auto d-block mt-5" type="submit">Find books in route!</button>
             </form>
             {% if request.method == 'POST' %}
-                <div class="line mt-5"></div><h3 class="mt-2 mb-2 w-50 container text-center">Results</h3>
+                <div class="line mt-5"></div><h3 class="mt-2 mb-5 w-50 container text-center">Results</h3>
             {% endif %}
             {% for station in stations %}
             <div class="options_list_on_seacrh">
-                <img name='{{ book.bookname }}' src='{{ book.imageURL }}'></img>
+                <img name='{{ book.bookname }}' src='{{ book.imageURL }}' title="Author: {{book.author}}<br><br>Gener: {{book.gener}}<br><br>Page Count: {{book.page_count}}<br><br>Condition: {{book.condition}}<br><br>Language: {{book.language}}<br><br>Cover Type: {{book.cover_type}}<br><br>Description: {{book.description}}"></img>
                 <div class='search_list_text'><div class='font-weight-bold text-white text-left'>{{ book.bookname }}</div>
                 <div class='font-weight-light text-white'>{{ book.author }}</div>
                 <div class='font-weight-light text-white'>{{ station.station }}</div>
