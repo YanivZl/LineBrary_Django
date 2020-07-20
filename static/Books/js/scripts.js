@@ -90,7 +90,7 @@ function flip_panel_relation(name) {
         $("#loan_now_panel[name='" + name + "']").append("<div>Attempting to reserve book</div>");
         $.post("/loans/", {name: name}, function(data){
             $("#loan_now_panel[name='" + name + "']").append("<div>The book will be saved for you until " + (d.getHours() + 1) + ":" + d.getMinutes() + " PM.</div>");
-            $("#loan_now_panel[name='" + name + "']").append("<div class='font-weight-bold text-white' style='font-size: 2em ; text-align: center; '>53D1-000D-12CA</div><div class='text-muted text-white'>*The code will be saved to your personal page.</div>");
+            $("#loan_now_panel[name='" + name + "']").append(`<div class='font-weight-bold text-white' style='font-size: 2em ; text-align: center; '>${data.id}</div><div class='text-muted text-white'>*The code will be saved to your personal page.</div>`);
         })
 
     });
