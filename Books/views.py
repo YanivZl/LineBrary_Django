@@ -7,6 +7,7 @@ from django.contrib.auth import authenticate, login, logout
 from .forms import BookForm, BookStationRelationForm , ProfileForm , RouteForm
 from django.http import HttpResponseRedirect
 from django.db import IntegrityError
+from django.core.files.storage import FileSystemStorage
 import random
 import os
 import json
@@ -71,8 +72,12 @@ def add_book(request):
         return render(request, 'Books/addbook.html', {'station_form' : BookStationRelationForm() , 'book_form' : BookForm() })
     else:
         if request.POST['bookname'] != "" and request.POST['author'] != "" and request.POST['description'] != "" and request.POST['language'] != "" and request.POST['page_count'] != 0:
-            b = Book(ISBN13=random.randint(0 , 999999999)  , bookname= request.POST['bookname'] , author= request.POST['author'] , gener= request.POST['gener'] , page_count= request.POST['page_count'] , condition=request.POST['condition'], image=request.POST['image'], language= request.POST['language'], description= request.POST['description'] , cover_type= request.POST['cover_type'])
-            b.imageURL = 'Books/Images/' +  b.image.url
+            b = Book(ISBN13=random.randint(0 , 999999999)  , bookname= request.POST['bookname'] , author= request.POST['author'] , gener= request.POST['gener'] , page_count= request.POST['page_count'] , condition=request.POST['condition'], language= request.POST['language'], description= request.POST['description'] , cover_type= request.POST['cover_type'])
+            fs = FileSystemStorage()
+            image = request.FILES['image']
+            filename = fs.save(f"Books/Images/{image.name}", image)
+                
+            b.imageURL = 'media/Books/Images/' +  image.name
             b.save()
             bsr = BookStationRelation(station=request.POST["station"], book= b)
             bsr.save()
