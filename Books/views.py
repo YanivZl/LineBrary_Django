@@ -98,9 +98,9 @@ def loans(request):
         user = Profile.objects.filter(user=request.user)[0]
         station = user.default_station
         book = Book.objects.filter(bookname=request.POST['name'])[0]
-        Order.objects.create(user=user,ISBN13=book, station=station)
+        order = Order.objects.create(user=user,ISBN13=book, station=station)
         BookStationRelation.objects.filter(book=book, station=station).delete()
-        return JsonResponse({})
+        return JsonResponse({"id": order.id})
 
 def addWishlist(request):
     if request.method=='POST':

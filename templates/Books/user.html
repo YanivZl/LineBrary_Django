@@ -137,11 +137,15 @@
                     <ul class="list-unstyled mt-4 ml-4">
                         {% for order in orders %}
                         <li class="media mt-4">
-                            <img class="mr-3" src="{{order.ISBN13.imageURL}}" alt="Generic placeholder image">
+                            {% if order.ISBN13.imageURL.0 ==  'h' %}
+                            <img class="mr-3" src="{{ order.ISBN13.imageURL }}">
+                            {% else %}
+                            <img class="mr-3" src="/{{ order.ISBN13.imageURL }} ">
+                            {% endif %}
                             <div class="media-body">
                                 <h4 class="mt-0 mb-1">{{order.ISBN13.bookname}}</h4>
-                                <b>Station:</b> Te-Aviv Center<br>
-                                <b>Loan Date:</b> {{order.order_date}}
+                                <b>Station:</b>{{order.station}}<br>
+                                <b>Order Id:</b>{{order.id}}<br>                                
                             </div>
                         </li>
                         {% endfor %}
