@@ -169,7 +169,7 @@ function searchWhileTyping()
 
             $(".search_screen").append('<div class="options_list_on_seacrh"></div>');
             $($(".options_list_on_seacrh")[i]).append("<img name='" + data[i].fields.bookname + "' src='" + data[i].fields.imageURL + "'></img>");
-            $($(".options_list_on_seacrh")[i]).append("<div class='search_list_text'><div class='font-weight-bold text-white text-left'>" + data[i].fields.bookname + "</div><div class='font-weight-light text-white'>Author Name</div><div class='font-weight-light text-white'>Year of publication</div></div>");
+            $($(".options_list_on_seacrh")[i]).append(`<div class='search_list_text'><div class='font-weight-bold text-white text-left'>${data[i].fields.bookname}</div><div class='font-weight-light text-white'>Author Name: ${data[i].fields.author}</div></div>`);
         }
 
         $(".options_list_on_seacrh").click(function() {
